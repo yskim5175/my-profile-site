@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>김라온 | Backend Developer</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: {
+              DEFAULT: '#0a0f1e',
+              light: '#1e2a3a',
+            },
+            surface: {
+              DEFAULT: '#111827',
+              light: '#1e2a3a',
+            },
+            accent: '#38bdf8',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* Global scroll behavior */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #0a0f1e;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #38bdf8;
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #0ea5e9;
+    }
+
+    /* Hero entrance animations */
+    @keyframes fadeSlideLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .animate-fade-left {
+      animation: fadeSlideLeft 0.8s ease-out forwards;
+    }
+
+    .animate-fade-up {
+      animation: fadeUp 0.7s ease-out forwards;
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.6s ease-out forwards;
+    }
+
+    .delay-100 {
+      animation-delay: 0.1s;
+    }
+
+    .delay-200 {
+      animation-delay: 0.2s;
+    }
+
+    .delay-300 {
+      animation-delay: 0.3s;
+    }
+
+    .delay-400 {
+      animation-delay: 0.4s;
+    }
+
+    .delay-500 {
+      animation-delay: 0.5s;
+    }
+
+    /* Section reveal animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Gradient text for name */
+    .gradient-text {
+      background: linear-gradient(135deg, #f0f4ff 30%, #38bdf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Glow circle */
+    .glow-circle {
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.18) 0%, transparent 70%);
+    }
+
+    /* Nav scrolled state */
+    nav.scrolled {
+      background-color: rgba(10, 15, 30, 0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(100, 116, 139, 0.2);
+    }
+
+    /* Skill card stagger */
+    .skill-card {
+      transition: all 0.3s ease-out;
+    }
+
+    .skill-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 30px rgba(56, 189, 248, 0.2);
+      border-color: rgba(56, 189, 248, 0.5);
+    }
+
+    /* Section heading underline */
+    .section-label::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 2px;
+      background: #38bdf8;
+      margin-right: 8px;
+      border-radius: 1px;
+    }
+  </style>
+</head>
+
+<body class="bg-navy text-white font-sans">
+  <!-- Navigation -->
+  <nav id="nav" class="fixed top-0 w-full z-50 transition-all duration-300">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8 py-4 flex items-center justify-between">
+      <!-- Logo -->
+      <a href="#hero" class="flex items-center gap-2">
+        <div class="w-10 h-10 bg-gradient-to-br from-accent to-sky-500 rounded-lg flex items-center justify-center font-bold text-navy">
+          KR
+        </div>
+        <span class="text-xl font-bold hidden sm:inline">김라온</span>
+      </a>
+
+      <!-- Desktop Menu -->
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#hero" class="text-sm font-medium text-slate-300 hover:text-accent transition">Home</a>
+        <a href="#about" class="text-sm font-medium text-slate-300 hover:text-accent transition">About</a>
+        <a href="#skills" class="text-sm font-medium text-slate-300 hover:text-accent transition">Skills</a>
+        <a href="#contact" class="text-sm font-medium text-slate-300 hover:text-accent transition">Contact</a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button id="menu-btn" class="md:hidden p-2 text-accent hover:bg-surface rounded-lg transition" aria-label="Toggle menu">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-surface border-t border-slate-700/50">
+      <div class="max-w-6xl mx-auto px-6 py-4 flex flex-col gap-4">
+        <a href="#hero" class="text-sm font-medium text-slate-300 hover:text-accent transition py-2">Home</a>
+        <a href="#about" class="text-sm font-medium text-slate-300 hover:text-accent transition py-2">About</a>
+        <a href="#skills" class="text-sm font-medium text-slate-300 hover:text-accent transition py-2">Skills</a>
+        <a href="#contact" class="text-sm font-medium text-slate-300 hover:text-accent transition py-2">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="hero" class="min-h-screen pt-20 flex items-center">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8 w-full">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <!-- Left Content -->
+        <div class="space-y-8">
+          <!-- Badge -->
+          <div class="animate-fade-left">
+            <span class="inline-block px-4 py-2 bg-accent/10 border border-accent/30 text-accent text-xs font-semibold tracking-widest uppercase rounded-full">
+              Backend Developer
+            </span>
+          </div>
+
+          <!-- Name -->
+          <div class="animate-fade-left delay-100">
+            <h1 class="text-6xl lg:text-7xl font-black tracking-tight gradient-text">
+              김라온
+            </h1>
+          </div>
+
+          <!-- Subtitle -->
+          <div class="animate-fade-left delay-200">
+            <p class="text-xl lg:text-2xl font-light text-slate-300">
+              Backend Developer & Problem Solver
+            </p>
+          </div>
+
+          <!-- Bio -->
+          <div class="animate-fade-left delay-300">
+            <p class="text-base lg:text-lg text-slate-400 leading-relaxed max-w-md">
+              안녕하세요. 저는 개발자입니다. 잘부탁드립니다~!
+            </p>
+          </div>
+
+          <!-- CTA Buttons -->
+          <div class="animate-fade-left delay-400 flex flex-wrap gap-4">
+            <a href="#contact" class="px-6 py-3 bg-accent text-navy font-semibold rounded-lg hover:bg-sky-300 transition-colors duration-200">
+              Contact Me
+            </a>
+            <a href="https://github.com" target="_blank" class="px-6 py-3 border border-accent/60 text-accent rounded-lg hover:bg-accent/10 transition-colors duration-200">
+              View GitHub
+            </a>
+          </div>
+        </div>
+
+        <!-- Right Decoration -->
+        <div class="animate-fade-up delay-300 relative hidden lg:flex items-center justify-center">
+          <!-- Glow background -->
+          <div class="absolute inset-0 glow-circle"></div>
+
+          <!-- Tech Stack Card -->
+          <div class="relative z-10 w-full max-w-sm bg-gradient-to-br from-surface to-surface-light rounded-3xl border border-slate-700/50 p-8 space-y-4">
+            <!-- Card header -->
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-accent to-sky-500 flex items-center justify-center">
+                <span class="text-navy font-black text-xs">KR</span>
+              </div>
+              <div>
+                <p class="text-white font-semibold text-sm">Tech Stack</p>
+                <p class="text-slate-400 text-xs">주요 기술</p>
+              </div>
+              <div class="ml-auto w-2 h-2 rounded-full bg-accent animate-pulse"></div>
+            </div>
+
+            <!-- Skill rows -->
+            <div class="hero-skill-item flex items-center gap-4 p-3 rounded-xl bg-navy/50 border border-slate-700/30 hover:border-accent/40 hover:bg-accent/5 transition-all duration-200 cursor-default">
+              <span class="text-2xl">🏗️</span>
+              <div class="flex-1">
+                <p class="text-white text-sm font-semibold">HTML</p>
+                <p class="text-slate-400 text-xs">마크업 구조</p>
+              </div>
+              <div class="w-16 h-1.5 rounded-full bg-slate-700 overflow-hidden">
+                <div class="h-full w-4/5 rounded-full bg-gradient-to-r from-accent to-sky-300"></div>
+              </div>
+            </div>
+
+            <div class="hero-skill-item flex items-center gap-4 p-3 rounded-xl bg-navy/50 border border-slate-700/30 hover:border-accent/40 hover:bg-accent/5 transition-all duration-200 cursor-default">
+              <span class="text-2xl">🎨</span>
+              <div class="flex-1">
+                <p class="text-white text-sm font-semibold">CSS</p>
+                <p class="text-slate-400 text-xs">스타일링</p>
+              </div>
+              <div class="w-16 h-1.5 rounded-full bg-slate-700 overflow-hidden">
+                <div class="h-full w-4/5 rounded-full bg-gradient-to-r from-accent to-sky-300"></div>
+              </div>
+            </div>
+
+            <div class="hero-skill-item flex items-center gap-4 p-3 rounded-xl bg-navy/50 border border-slate-700/30 hover:border-accent/40 hover:bg-accent/5 transition-all duration-200 cursor-default">
+              <span class="text-2xl">⚡</span>
+              <div class="flex-1">
+                <p class="text-white text-sm font-semibold">JavaScript</p>
+                <p class="text-slate-400 text-xs">프론트엔드</p>
+              </div>
+              <div class="w-16 h-1.5 rounded-full bg-slate-700 overflow-hidden">
+                <div class="h-full w-3/4 rounded-full bg-gradient-to-r from-accent to-sky-300"></div>
+              </div>
+            </div>
+
+            <div class="hero-skill-item flex items-center gap-4 p-3 rounded-xl bg-navy/50 border border-slate-700/30 hover:border-accent/40 hover:bg-accent/5 transition-all duration-200 cursor-default">
+              <span class="text-2xl">☕</span>
+              <div class="flex-1">
+                <p class="text-white text-sm font-semibold">Java</p>
+                <p class="text-slate-400 text-xs">백엔드 언어</p>
+              </div>
+              <div class="w-16 h-1.5 rounded-full bg-slate-700 overflow-hidden">
+                <div class="h-full w-full rounded-full bg-gradient-to-r from-accent to-sky-300"></div>
+              </div>
+            </div>
+
+            <div class="hero-skill-item flex items-center gap-4 p-3 rounded-xl bg-navy/50 border border-slate-700/30 hover:border-accent/40 hover:bg-accent/5 transition-all duration-200 cursor-default">
+              <span class="text-2xl">🚀</span>
+              <div class="flex-1">
+                <p class="text-white text-sm font-semibold">Spring Boot</p>
+                <p class="text-slate-400 text-xs">백엔드 프레임워크</p>
+              </div>
+              <div class="w-16 h-1.5 rounded-full bg-slate-700 overflow-hidden">
+                <div class="h-full w-full rounded-full bg-gradient-to-r from-accent to-sky-300"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="py-24 lg:py-32 reveal">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8">
+      <!-- Section heading -->
+      <div class="mb-16">
+        <p class="section-label text-xs font-semibold tracking-widest uppercase text-accent mb-4">About</p>
+        <h2 class="text-4xl lg:text-5xl font-bold">Who I Am</h2>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <!-- Avatar -->
+        <div class="flex justify-center lg:justify-start">
+          <div class="w-64 h-64 rounded-2xl bg-gradient-to-br from-accent/20 to-sky-500/20 border border-accent/30 flex items-center justify-center">
+            <div class="w-56 h-56 rounded-xl bg-gradient-to-br from-accent to-sky-500 flex items-center justify-center">
+              <span class="text-6xl font-black text-navy">라온</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="space-y-8">
+          <!-- Bio paragraph -->
+          <div>
+            <p class="text-lg text-slate-300 leading-relaxed">
+              저는 열정적인 백엔드 개발자로, 견고하고 확장성 있는 시스템을 만드는 것을 좋아합니다.
+              Java와 Spring Boot를 활용해 효율적이고 안정적인 서비스를 개발하고 있습니다.
+            </p>
+          </div>
+
+          <!-- Facts grid -->
+          <div class="grid grid-cols-2 gap-6">
+            <div class="rounded-lg bg-surface border border-slate-700/50 p-6">
+              <p class="text-sm text-slate-400 mb-2">위치</p>
+              <p class="text-xl font-semibold">Korea</p>
+            </div>
+            <div class="rounded-lg bg-surface border border-slate-700/50 p-6">
+              <p class="text-sm text-slate-400 mb-2">언어</p>
+              <p class="text-xl font-semibold">Korean / Eng</p>
+            </div>
+            <div class="rounded-lg bg-surface border border-slate-700/50 p-6">
+              <p class="text-sm text-slate-400 mb-2">직무</p>
+              <p class="text-xl font-semibold">Backend Dev</p>
+            </div>
+            <div class="rounded-lg bg-surface border border-slate-700/50 p-6">
+              <p class="text-sm text-slate-400 mb-2">초점</p>
+              <p class="text-xl font-semibold">Scalability</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section id="skills" class="py-24 lg:py-32 bg-surface/30 reveal">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8">
+      <!-- Section heading -->
+      <div class="mb-16">
+        <p class="section-label text-xs font-semibold tracking-widest uppercase text-accent mb-4">Skills</p>
+        <h2 class="text-4xl lg:text-5xl font-bold">Technology Stack</h2>
+      </div>
+
+      <!-- Skills grid -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-6">
+        <!-- HTML -->
+        <div class="skill-card reveal rounded-2xl border border-slate-700/50 bg-surface p-6 flex flex-col items-center justify-center text-center hover:border-accent/50 group">
+          <div class="w-14 h-14 rounded-lg bg-accent/10 flex items-center justify-center mb-4 group-hover:bg-accent/20 transition">
+            <span class="text-2xl">🏗️</span>
+          </div>
+          <p class="font-semibold text-slate-200">HTML</p>
+          <p class="text-xs text-slate-400 mt-1">Structure</p>
+        </div>
+
+        <!-- CSS -->
+        <div class="skill-card reveal rounded-2xl border border-slate-700/50 bg-surface p-6 flex flex-col items-center justify-center text-center hover:border-accent/50 group">
+          <div class="w-14 h-14 rounded-lg bg-accent/10 flex items-center justify-center mb-4 group-hover:bg-accent/20 transition">
+            <span class="text-2xl">🎨</span>
+          </div>
+          <p class="font-semibold text-slate-200">CSS</p>
+          <p class="text-xs text-slate-400 mt-1">Styling</p>
+        </div>
+
+        <!-- JavaScript -->
+        <div class="skill-card reveal rounded-2xl border border-slate-700/50 bg-surface p-6 flex flex-col items-center justify-center text-center hover:border-accent/50 group">
+          <div class="w-14 h-14 rounded-lg bg-accent/10 flex items-center justify-center mb-4 group-hover:bg-accent/20 transition">
+            <span class="text-2xl">⚡</span>
+          </div>
+          <p class="font-semibold text-slate-200">JavaScript</p>
+          <p class="text-xs text-slate-400 mt-1">Frontend</p>
+        </div>
+
+        <!-- Java -->
+        <div class="skill-card reveal rounded-2xl border border-slate-700/50 bg-surface p-6 flex flex-col items-center justify-center text-center hover:border-accent/50 group">
+          <div class="w-14 h-14 rounded-lg bg-accent/10 flex items-center justify-center mb-4 group-hover:bg-accent/20 transition">
+            <span class="text-2xl">☕</span>
+          </div>
+          <p class="font-semibold text-slate-200">Java</p>
+          <p class="text-xs text-slate-400 mt-1">Backend</p>
+        </div>
+
+        <!-- Spring Boot -->
+        <div class="skill-card reveal rounded-2xl border border-slate-700/50 bg-surface p-6 flex flex-col items-center justify-center text-center hover:border-accent/50 group">
+          <div class="w-14 h-14 rounded-lg bg-accent/10 flex items-center justify-center mb-4 group-hover:bg-accent/20 transition">
+            <span class="text-2xl">🚀</span>
+          </div>
+          <p class="font-semibold text-slate-200">Spring Boot</p>
+          <p class="text-xs text-slate-400 mt-1">Framework</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="py-24 lg:py-32 reveal">
+    <div class="max-w-2xl mx-auto px-6 lg:px-8 text-center">
+      <!-- Section heading -->
+      <div class="mb-16">
+        <p class="section-label text-xs font-semibold tracking-widest uppercase text-accent mb-4 justify-center flex">Contact</p>
+        <h2 class="text-4xl lg:text-5xl font-bold mb-6">Let's Work Together</h2>
+        <p class="text-lg text-slate-400">
+          프로젝트나 협업에 관심이 있으시면 언제든 연락해주세요.
+        </p>
+      </div>
+
+      <!-- Contact card -->
+      <div class="rounded-2xl border border-slate-700/50 bg-surface p-8 lg:p-12 hover:border-accent/50 transition">
+        <div class="flex items-center justify-center gap-4 mb-6">
+          <span class="text-4xl">📧</span>
+        </div>
+        <p class="text-slate-400 text-sm mb-2">Email</p>
+        <a href="mailto:test@test.com" class="text-2xl lg:text-3xl font-bold text-accent hover:text-sky-300 transition">
+          test@test.com
+        </a>
+      </div>
+
+      <!-- Social links (placeholder) -->
+      <div class="mt-12 flex justify-center gap-6">
+        <a href="https://github.com" target="_blank" class="w-12 h-12 rounded-full border border-slate-700/50 flex items-center justify-center hover:border-accent/50 hover:bg-accent/10 transition">
+          <span class="text-xl">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800 bg-surface/50 py-8">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8 text-center text-slate-400 text-sm">
+      <p>© 2025 김라온. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    // Nav scroll effect
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
+    });
+
+    // Mobile menu toggle
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    menuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // Close mobile menu on link click
+    document.querySelectorAll('#mobile-menu a').forEach((link) => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+      });
+    });
+
+    // IntersectionObserver for reveal animations
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    // Observe all reveal elements
+    document.querySelectorAll('.reveal').forEach((el) => {
+      observer.observe(el);
+    });
+
+    // Stagger skill cards
+    document.querySelectorAll('.skill-card').forEach((card, index) => {
+      card.style.transitionDelay = `${index * 80}ms`;
+      observer.observe(card);
+    });
+  </script>
+</body>
+
+</html>
